@@ -1,0 +1,35 @@
+# Virtual Environment
+venv/
+env/
+
+# Sensitive Files
+.env
+API.txt
+data.txt
+*.pkl
+vector_db.pkl
+
+# Logs
+*.log
+app.log
+
+# Python cache
+__pycache__/
+*.pyc
+
+# IDE
+.vscode/
+.idea/
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Database (if you have any)
+*.db
+*.sqlite
+*.sqlite3

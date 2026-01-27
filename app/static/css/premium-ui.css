@@ -1,0 +1,900 @@
+/**
+ * Al Huda - Premium UI Enhancements
+ * Version: 2.2.0
+ * Enhanced Chat, Tables, and Animations
+ */
+
+/* ============================================================================
+   ENHANCED TABLE STYLING - PROFESSIONAL CHATBOT STYLE
+   ============================================================================ */
+
+.message-content table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    font-size: 0.9rem;
+    line-height: 1.8;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        0 8px 32px rgba(5, 150, 105, 0.12),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        inset 0 0 0 1px rgba(5, 150, 105, 0.08);
+    border: 2px solid rgba(5, 150, 105, 0.2);
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafb 100%);
+    display: table;
+    table-layout: fixed;
+}
+
+.dark .message-content table {
+    box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        0 6px 16px rgba(16, 185, 129, 0.15),
+        inset 0 0 0 1px rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.35);
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 1) 100%);
+}
+
+.message-content th,
+.message-content td {
+    padding: 1.25rem 1.75rem;
+    text-align: left;
+    vertical-align: middle;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.65;
+    border-right: 1px solid rgba(5, 150, 105, 0.08);
+}
+
+.message-content th:last-child,
+.message-content td:last-child {
+    border-right: none;
+}
+
+.message-content th {
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #059669 100%);
+    font-weight: 700;
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: none;
+    position: sticky;
+    top: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    white-space: nowrap;
+    padding: 1rem 1.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.message-content th:last-child {
+    border-right: none;
+}
+
+.message-content th:first-child {
+    border-top-left-radius: 14px;
+}
+
+.message-content th:last-child {
+    border-top-right-radius: 14px;
+}
+
+.dark .message-content th {
+    background: linear-gradient(135deg, #047857 0%, #059669 50%, #047857 100%);
+    color: #f0fdf4;
+    border-right-color: rgba(255, 255, 255, 0.1);
+}
+
+.message-content td {
+    border-bottom: 1px solid rgba(5, 150, 105, 0.1);
+    color: #374151;
+    transition: all 0.2s ease;
+    background: transparent;
+    line-height: 1.7;
+    font-size: 0.9rem;
+}
+
+.dark .message-content td {
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+    border-right-color: rgba(16, 185, 129, 0.08);
+    color: #e2e8f0;
+}
+
+.message-content tbody tr {
+    transition: all 0.25s ease;
+}
+
+/* Zebra striping for better readability */
+.message-content tbody tr:nth-child(odd) {
+    background: rgba(5, 150, 105, 0.02);
+}
+
+.message-content tbody tr:nth-child(even) {
+    background: rgba(5, 150, 105, 0.055);
+}
+
+.dark .message-content tbody tr:nth-child(odd) {
+    background: rgba(16, 185, 129, 0.03);
+}
+
+.dark .message-content tbody tr:nth-child(even) {
+    background: rgba(16, 185, 129, 0.07);
+}
+
+.message-content tbody tr:hover {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.12), rgba(16, 185, 129, 0.08)) !important;
+    box-shadow: inset 0 0 0 1px rgba(5, 150, 105, 0.15);
+}
+
+.dark .message-content tbody tr:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(16, 185, 129, 0.12)) !important;
+}
+
+.message-content tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.message-content tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 14px;
+}
+
+.message-content tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 14px;
+}
+
+/* First column styling - emphasize row labels */
+.message-content td:first-child {
+    font-weight: 600;
+    color: #1e293b;
+    background: rgba(5, 150, 105, 0.03);
+}
+
+.dark .message-content td:first-child {
+    color: #f1f5f9;
+    background: rgba(16, 185, 129, 0.05);
+}
+
+/* FALLBACK: Style first row as header if no thead exists */
+.message-content table:not(:has(thead)) tbody tr:first-child td {
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #059669 100%) !important;
+    font-weight: 700 !important;
+    color: white !important;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    border-bottom: none !important;
+    padding: 1rem 1.5rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dark .message-content table:not(:has(thead)) tbody tr:first-child td {
+    background: linear-gradient(135deg, #047857 0%, #059669 50%, #047857 100%) !important;
+    color: #f0fdf4 !important;
+}
+
+/* Total/summary row styling - less aggressive */
+.message-content tbody tr:last-child:not(:first-child) td {
+    font-weight: 500;
+    background: rgba(5, 150, 105, 0.06);
+}
+
+.dark .message-content tbody tr:last-child:not(:first-child) td {
+    background: rgba(16, 185, 129, 0.09);
+}
+
+/* ============================================================================
+   ENHANCED CHAT MESSAGE STYLING
+   ============================================================================ */
+
+/* Chat container improvements */
+#chatContainer {
+    scroll-behavior: smooth;
+    padding: 1.5rem;
+}
+
+/* Message row styling */
+.message-row {
+    animation: messageSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-bottom: 1.5rem;
+}
+
+/* Ensure chat-message also has proper spacing */
+.chat-message {
+    margin-bottom: 2rem !important;
+}
+
+@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* User message bubble - Premium glass effect */
+.user-message {
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+    box-shadow:
+        0 4px 15px rgba(5, 150, 105, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-radius: 24px 24px 6px 24px;
+    padding: 18px 26px;
+    position: relative;
+    max-width: 80%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+@keyframes gradientShift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+.user-message:hover {
+    box-shadow:
+        0 8px 25px rgba(5, 150, 105, 0.4),
+        0 3px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* Bot message styling - Premium look */
+.bot-message {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid rgba(5, 150, 105, 0.12);
+    border-radius: 6px 24px 24px 24px;
+    padding: 1.5rem 1.75rem;
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.04),
+        0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.bot-message::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #059669, #10b981, #34d399);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bot-message:hover::before {
+    opacity: 1;
+}
+
+.dark .bot-message {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-color: rgba(16, 185, 129, 0.18);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.15),
+        0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Bot message content */
+.bot-message-content {
+    color: #334155;
+    line-height: 1.85;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+}
+
+.dark .bot-message-content {
+    color: #e2e8f0;
+}
+
+/* Avatar styling - Enhanced */
+.message-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.message-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 17px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.message-avatar:hover {
+    transform: scale(1.08) rotate(3deg);
+}
+
+.message-avatar:hover::after {
+    border-color: currentColor;
+    opacity: 0.3;
+}
+
+.bot-avatar {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.4);
+}
+
+.user-avatar {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    box-shadow:
+        0 4px 15px rgba(59, 130, 246, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.1);
+    align-self: flex-end;
+    margin-bottom: 0;
+}
+
+/* ============================================================================
+   ENHANCED INPUT AREA
+   ============================================================================ */
+
+.chat-input-area {
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(5, 150, 105, 0.1);
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+.dark .chat-input-area {
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.92));
+    border-top-color: rgba(16, 185, 129, 0.12);
+}
+
+.chat-input-container {
+    background: white;
+    border: 2px solid rgba(5, 150, 105, 0.15);
+    border-radius: 1.25rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.04),
+        0 1px 3px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+.chat-input-container:focus-within {
+    border-color: rgba(5, 150, 105, 0.5);
+    box-shadow:
+        0 6px 30px rgba(5, 150, 105, 0.12),
+        0 0 0 4px rgba(5, 150, 105, 0.08);
+    transform: translateY(-2px);
+}
+
+.dark .chat-input-container {
+    background: #1e293b;
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.15),
+        0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.dark .chat-input-container:focus-within {
+    border-color: rgba(16, 185, 129, 0.6);
+    box-shadow:
+        0 6px 30px rgba(16, 185, 129, 0.15),
+        0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+/* Textarea styling */
+.chat-input-container textarea {
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 1rem 1.25rem;
+}
+
+/* Send button - Premium style */
+.send-button {
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+    background-size: 200% 200%;
+    box-shadow:
+        0 4px 15px rgba(5, 150, 105, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.send-button::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.send-button:hover:not(:disabled) {
+    transform: scale(1.12) translateY(-2px);
+    box-shadow:
+        0 8px 30px rgba(5, 150, 105, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    background-position: 100% 100%;
+}
+
+.send-button:hover:not(:disabled)::before {
+    opacity: 1;
+}
+
+.send-button:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+/* ============================================================================
+   ENHANCED THINKING INDICATOR
+   ============================================================================ */
+
+.thinking-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 26px;
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.06));
+    border-radius: 18px;
+    border: 1.5px solid rgba(5, 150, 105, 0.18);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(5, 150, 105, 0.08);
+    animation: thinkingPulse 2s ease-in-out infinite;
+}
+
+@keyframes thinkingPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 4px 15px rgba(5, 150, 105, 0.08);
+        border-color: rgba(5, 150, 105, 0.18);
+    }
+
+    50% {
+        box-shadow: 0 6px 25px rgba(5, 150, 105, 0.15);
+        border-color: rgba(5, 150, 105, 0.3);
+    }
+}
+
+.dark .thinking-container {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08));
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.thinking-dots {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.thinking-dots span {
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(135deg, #059669, #10b981);
+    border-radius: 50%;
+    animation: thinkingBounce 1.2s infinite ease-in-out;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.4);
+}
+
+.thinking-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.thinking-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes thinkingBounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.7) translateY(0);
+        opacity: 0.5;
+    }
+
+    40% {
+        transform: scale(1.1) translateY(-6px);
+        opacity: 1;
+    }
+}
+
+.thinking-text {
+    font-size: 14px;
+    color: #059669;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.dark .thinking-text {
+    color: #34d399;
+}
+
+/* ============================================================================
+   ENHANCED STREAMING CURSOR
+   ============================================================================ */
+
+.typing-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1.2em;
+    background: linear-gradient(135deg, #059669, #10b981);
+    margin-left: 3px;
+    vertical-align: text-bottom;
+    animation: cursorBlink 0.6s ease-in-out infinite;
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(5, 150, 105, 0.5);
+}
+
+@keyframes cursorBlink {
+
+    0%,
+    45% {
+        opacity: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+
+/* ============================================================================
+   ENHANCED QURAN & HADITH BOXES
+   ============================================================================ */
+
+.quran-verse {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.06));
+    border: 2px solid rgba(5, 150, 105, 0.25);
+    border-radius: 16px;
+    padding: 22px 28px;
+    margin: 28px 0;
+    position: relative;
+    box-shadow:
+        0 4px 20px rgba(5, 150, 105, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quran-verse:hover {
+    box-shadow:
+        0 8px 30px rgba(5, 150, 105, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px);
+    border-color: rgba(5, 150, 105, 0.4);
+}
+
+.dark .quran-verse {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.06));
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow:
+        0 4px 20px rgba(5, 150, 105, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.hadith-box {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.06));
+    border: 2px solid rgba(139, 92, 246, 0.25);
+    border-radius: 16px;
+    padding: 22px 28px;
+    margin: 28px 0;
+    position: relative;
+    box-shadow:
+        0 4px 20px rgba(139, 92, 246, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hadith-box:hover {
+    box-shadow:
+        0 8px 30px rgba(139, 92, 246, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.dark .hadith-box {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(124, 58, 237, 0.08));
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+/* ============================================================================
+   ENHANCED LIST STYLING
+   ============================================================================ */
+
+.message-content ul li,
+.message-content ol li {
+    position: relative;
+    padding: 0.875rem 1.25rem 0.875rem 3rem;
+    margin-bottom: 0.625rem;
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(16, 185, 129, 0.02));
+    border: 1px solid rgba(5, 150, 105, 0.12);
+    border-radius: 12px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    line-height: 1.7;
+}
+
+.message-content ul li:hover,
+.message-content ol li:hover {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.06));
+    border-color: rgba(5, 150, 105, 0.25);
+    transform: translateX(6px);
+    box-shadow: 0 3px 12px rgba(5, 150, 105, 0.1);
+}
+
+.dark .message-content ul li,
+.dark .message-content ol li {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(16, 185, 129, 0.02));
+    border-color: rgba(16, 185, 129, 0.12);
+}
+
+.dark .message-content ul li:hover,
+.dark .message-content ol li:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.06));
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* ============================================================================
+   WELCOME SCREEN ENHANCEMENTS
+   ============================================================================ */
+
+.example-card {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(5, 150, 105, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.example-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #059669, #10b981, #34d399);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.example-card:hover::before {
+    transform: scaleX(1);
+}
+
+.example-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow:
+        0 15px 40px rgba(5, 150, 105, 0.15),
+        0 5px 15px rgba(0, 0, 0, 0.08);
+    border-color: rgba(5, 150, 105, 0.25);
+}
+
+.dark .example-card:hover {
+    box-shadow:
+        0 15px 40px rgba(16, 185, 129, 0.12),
+        0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================================================
+   COPY & ACTION BUTTONS
+   ============================================================================ */
+
+.copy-btn,
+.continue-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.copy-btn::before,
+.continue-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.copy-btn:hover::before,
+.continue-btn:hover::before {
+    opacity: 1;
+}
+
+.copy-btn {
+    color: #64748b;
+    background: rgba(100, 116, 139, 0.08);
+}
+
+.copy-btn:hover {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+    border-color: rgba(5, 150, 105, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+}
+
+.continue-btn {
+    color: white;
+    background: linear-gradient(135deg, #059669, #10b981);
+    box-shadow: 0 3px 12px rgba(5, 150, 105, 0.3);
+}
+
+.continue-btn:hover {
+    transform: translateY(-2px) translateX(3px);
+    box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+}
+
+/* ============================================================================
+   TOAST NOTIFICATIONS - ENHANCED
+   ============================================================================ */
+
+.toast {
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 16px;
+    box-shadow:
+        0 8px 30px rgba(5, 150, 105, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.15);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1000;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ============================================================================
+   SMOOTH SCROLL BEHAVIOR
+   ============================================================================ */
+
+* {
+    scroll-behavior: smooth;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.3), rgba(16, 185, 129, 0.3));
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.5), rgba(16, 185, 129, 0.5));
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(52, 211, 153, 0.3));
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.5), rgba(52, 211, 153, 0.5));
+}
+
+/* ============================================================================
+   RESPONSIVE ENHANCEMENTS
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .message-content table {
+        font-size: 0.85rem;
+    }
+
+    .message-content th,
+    .message-content td {
+        padding: 0.875rem 1rem;
+    }
+
+    .user-message {
+        max-width: 88%;
+        padding: 14px 18px;
+        border-radius: 20px 20px 4px 20px;
+    }
+
+    .bot-message {
+        padding: 1rem 1.25rem;
+    }
+
+    .message-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+    }
+
+    .chat-input-area {
+        padding: 0.875rem 1rem 1.25rem;
+    }
+
+    .example-card:hover {
+        transform: translateY(-4px);
+    }
+}
+
+/* ============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+button:focus-visible,
+a:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+    outline: 2px solid #10b981;
+    outline-offset: 3px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .message-content table {
+        border: 2px solid currentColor;
+    }
+
+    .user-message,
+    .bot-message {
+        border: 2px solid currentColor;
+    }
+}

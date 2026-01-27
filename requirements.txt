@@ -1,0 +1,35 @@
+# Core FastAPI Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-dotenv==1.0.0
+pydantic==2.5.0
+python-multipart==0.0.6
+
+# Google Gemini AI
+google-genai==0.2.0
+
+# Web Scraping
+requests==2.31.0
+beautifulsoup4==4.12.2
+lxml==4.9.3
+
+# Vector Database
+sentence-transformers==2.2.2
+faiss-cpu==1.13.2
+
+# Audio Processing
+SpeechRecognition==3.10.0
+pydub==0.25.1
+
+# Data Processing
+numpy==1.24.3
+
+# Mistral AI
+mistralai>=1.0.0
+
+# Text-to-Speech
+pyttsx3==2.90
+
+# Document Processing
+python-docx==1.1.0
+PyPDF2>=3.0.0
