@@ -59,12 +59,21 @@ async def lifespan(app: FastAPI):
     logger.info(f"   DataBase dir  : {DATABASE_FOLDER}")
     logger.info(f"   Max msg/chat  : {MAX_CHAT_MESSAGES}")
     logger.info("=" * 60)
+    
+    # Start background tasks
     asyncio.create_task(_scan_database_background())
-    # Open browser automatically after server is ready
-    threading.Thread(
-        target=lambda: (__import__('time').sleep(3), webbrowser.open("http://127.0.0.1:8000")),
-        daemon=True,
-    ).start()
+    
+    # Open browser in background after a small delay
+    def open_browser():
+        import time
+        time.sleep(2)
+        try:
+            webbrowser.open("http://127.0.0.1:8000")
+        except Exception as exc:
+            logger.warning(f"Could not open browser automatically: {exc}")
+    
+    threading.Thread(target=open_browser, daemon=True).start()
+    
     yield
     # (shutdown logic can be added here in the future)
 

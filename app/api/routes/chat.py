@@ -129,13 +129,20 @@ async def _build_context(req: ChatRequest, conversation_id: str):
             logger.info(f"Vector search: {len(search_results)} contexts retrieved")
 
     # 3. Compose user content block
-    db_context = relevant_context if relevant_context else "No specific context available from database."
-    web_block = f"\nWEB CONTENT EXTRACTED:\n{web_content}" if web_content else ""
-    user_content = (
-        f"{db_context}{web_block}\n\n"
-        f"USER QUESTION:\n{user_message}\n\n"
-        f"Please provide a helpful, accurate response with proper citations:"
-    )
+    # Build context hierarchy: database → web content → user question
+    content_parts = [
+        relevant_context if relevant_context else "No specific Islamic knowledge base context available."
+    ]
+    
+    if web_content:
+        content_parts.append(f"\nWEB CONTENT EXTRACTED:\n{web_content}")
+    
+    content_parts.extend([
+        f"\nUSER QUESTION:\n{user_message}",
+        "\nPlease provide a helpful, accurate response with proper citations:"
+    ])
+    
+    user_content = "".join(content_parts)
 
     return user_content, sources_used, context_chunks, web_extraction_performed
 
@@ -246,16 +253,21 @@ async def chat_stream_endpoint(req: ChatRequest):
                             yield f"data: {json.dumps({'type': 'chunk', 'content': delta})}\n\n"
                             await asyncio.sleep(0.01)
             else:
-                # Fallback: get full response then stream it in small chunks
+                # Fallback: get full response then stream it in appropriate chunks
+                # Scale chunk size and delay based on response length for natural flow
                 response = await mistral_client.chat.complete_async(
                     model=MISTRAL_MODEL, messages=messages, **GENERATION_CONFIG
                 )
                 if response and response.choices:
                     full_response = response.choices[0].message.content
-                    for i in range(0, len(full_response), 20):
-                        piece = full_response[i : i + 20]
+                    # Adaptive chunking: larger responses get bigger chunks
+                    chunk_size = max(15, min(50, len(full_response) // 20))
+                    chunk_delay = 0.02 if len(full_response) > 500 else 0.04
+                    
+                    for i in range(0, len(full_response), chunk_size):
+                        piece = full_response[i : i + chunk_size]
                         yield f"data: {json.dumps({'type': 'chunk', 'content': piece})}\n\n"
-                        await asyncio.sleep(0.05)
+                        await asyncio.sleep(chunk_delay)
 
             chat_memory.add_message(conversation_id, "assistant", full_response)
             yield f"data: {json.dumps({'type': 'complete', 'sources': sources_used})}\n\n"

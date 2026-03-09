@@ -39,10 +39,13 @@ class RateLimiter:
 
     def get_wait_time(self) -> float:
         """Seconds to wait before the next request is allowed."""
+        now = time.time()
+        # Clean up old requests first to avoid stale entries
+        self._requests = [t for t in self._requests if now - t < self.window]
         if not self._requests:
             return 0.0
-        oldest = min(self._requests)
-        return max(0.0, self.window - (time.time() - oldest))
+        oldest = self._requests[0]
+        return max(0.0, self.window - (now - oldest))
 
     @property
     def request_count(self) -> int:

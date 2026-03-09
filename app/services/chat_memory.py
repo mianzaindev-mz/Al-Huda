@@ -100,7 +100,7 @@ class ChatMemoryManager:
             if "updated_at" in meta
             and (
                 datetime.now() - datetime.fromisoformat(meta["updated_at"])
-            ).seconds < 3600
+            ).total_seconds() < 3600
         )
         return {
             "total_conversations": len(self.conversations),

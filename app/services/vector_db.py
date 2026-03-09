@@ -140,8 +140,8 @@ class VectorDatabase:
             logger.error(f"search_async failed: {exc}")
             return []
 
-    def search(self, query: str, k: int = 5, min_score: float = 0.0) -> List[Dict]:
-        """Synchronous search (backward compatibility)."""
+    def search(self, query: str, k: int = 5, min_score: float = 0.3) -> List[Dict]:
+        """Synchronous search (backward compatibility). Default min_score matches async version."""
         if not self.texts:
             return []
         try:

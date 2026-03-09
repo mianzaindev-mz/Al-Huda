@@ -18,6 +18,18 @@ from app.services.rate_limiter import rate_limiter, retry_with_backoff
 
 logger = logging.getLogger(__name__)
 
+# Compile regex patterns once for performance
+_QURAN_MENTION_PATTERN = re.compile(r"Qur'?an|Surah|Ayah|verse", re.IGNORECASE)
+_HADITH_MENTION_PATTERN = re.compile(
+    r"Hadith|narrated|reported by|Bukhari|Muslim|Tirmidhi|Abu Dawud|Nasa'?i|Ibn Majah",
+    re.IGNORECASE,
+)
+_QURAN_REF_PATTERN = re.compile(r"Surah\s+\w+\s*[:\-]\s*\d+", re.IGNORECASE)
+_HADITH_REF_PATTERN = re.compile(
+    r"(Bukhari|Muslim|Tirmidhi|Abu Dawud|Nasa'?i|Ibn Majah)\s+\d+",
+    re.IGNORECASE,
+)
+
 # ---------------------------------------------------------------------------
 # Client singleton
 # ---------------------------------------------------------------------------
@@ -84,26 +96,14 @@ def verify_islamic_citations(text: str) -> str:
     """Append a notice if the AI mentions Quran/Hadith without a proper citation.
 
     This is a lightweight safety net — not a replacement for scholarly review.
+    Uses precompiled regex patterns for better performance.
     """
-    quran_patterns = [r"Qur'?an", r"Surah", r"Ayah", r"verse"]
-    hadith_patterns = [
-        r"Hadith", r"narrated", r"reported by",
-        r"Bukhari", r"Muslim", r"Tirmidhi",
-        r"Abu Dawud", r"Nasa'?i", r"Ibn Majah",
-    ]
-
-    has_quran = any(re.search(p, text, re.IGNORECASE) for p in quran_patterns)
-    has_hadith = any(re.search(p, text, re.IGNORECASE) for p in hadith_patterns)
+    has_quran = _QURAN_MENTION_PATTERN.search(text) is not None
+    has_hadith = _HADITH_MENTION_PATTERN.search(text) is not None
 
     # Check for actual references (e.g. "Surah Al-Baqarah 2:286")
-    has_quran_ref = bool(re.search(r"Surah\s+\w+\s*[:\-]\s*\d+", text, re.IGNORECASE))
-    has_hadith_ref = bool(
-        re.search(
-            r"(Bukhari|Muslim|Tirmidhi|Abu Dawud|Nasa'?i|Ibn Majah)\s+\d+",
-            text,
-            re.IGNORECASE,
-        )
-    )
+    has_quran_ref = _QURAN_REF_PATTERN.search(text) is not None
+    has_hadith_ref = _HADITH_REF_PATTERN.search(text) is not None
 
     warnings: List[str] = []
     if has_quran and not has_quran_ref:

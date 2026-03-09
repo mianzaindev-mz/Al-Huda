@@ -139,10 +139,13 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]
         overlap:    Words of overlap kept between consecutive chunks.
 
     Returns:
-        List of non-empty text chunk strings.
+        List of non-empty text chunk strings (each with at least 30 chars).
     """
     if not text or not text.strip():
         return []
+
+    # Validate overlap size
+    overlap = min(overlap, chunk_size // 2)  # Prevent overlap from being too large
 
     # Primary split on double newlines (paragraph boundaries)
     paragraphs = re.split(r"\n\n+|\r\n\r\n+", text)
@@ -160,25 +163,32 @@ def chunk_text(text: str, chunk_size: int = 500, overlap: int = 50) -> List[str]
 
         for sentence in sentences:
             words = sentence.split()
+            if not words:
+                continue
+
             word_count = len(words)
 
+            # Check if adding this sentence would exceed chunk size
             if current_length + word_count > chunk_size and current_chunk:
+                # Save current chunk
                 chunk_text_str = " ".join(current_chunk)
                 if len(chunk_text_str.strip()) > 30:
                     chunks.append(chunk_text_str.strip())
-                # Carry over the last *overlap* words for context continuity
-                overlap_words = current_chunk[-overlap:] if len(current_chunk) > overlap else current_chunk
-                current_chunk = overlap_words + words
+                
+                # Prepare overlap for next chunk
+                num_overlap = min(overlap, len(current_chunk))
+                current_chunk = current_chunk[-num_overlap:] + words
                 current_length = len(current_chunk)
             else:
+                # Add to current chunk
                 current_chunk.extend(words)
                 current_length += word_count
 
     # Flush remaining words
     if current_chunk:
-        last = " ".join(current_chunk)
-        if len(last.strip()) > 30:
-            chunks.append(last.strip())
+        final_chunk = " ".join(current_chunk)
+        if len(final_chunk.strip()) > 30:
+            chunks.append(final_chunk.strip())
 
     logger.info(f"Chunking complete — {len(chunks)} chunks created")
     return chunks

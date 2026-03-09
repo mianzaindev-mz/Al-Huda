@@ -88,17 +88,24 @@ async def extract_web_content_via_mistral(
 ) -> str:
     """Scrape each URL and ask Mistral to distill only query-relevant content.
 
-    Processes up to 3 URLs. Returns a combined string (empty if nothing useful).
+    Processes up to 3 URLs (limits API cost and latency). Returns combined string.
+    Empty string if no useful content extracted from any URL.
     """
     from app.services.mistral_client import mistral_client   # Late import avoids circular dep
 
     if not urls:
         return ""
 
-    logger.info(f"Extracting web content from {len(urls)} URL(s)")
+    # Enforce URL limit
+    max_urls = 3
+    urls_to_process = urls[:max_urls]
+    if len(urls) > max_urls:
+        logger.info(f"URL limit enforced: processing {max_urls}/{len(urls)} URLs")
+
+    logger.info(f"Extracting web content from {len(urls_to_process)} URL(s)")
     extracted_parts: List[str] = []
 
-    for url in urls[:3]:
+    for url in urls_to_process:
         text, ok, _ = await scrape_website_async(url, max_chars=5_000)
         if not (ok and text):
             continue
