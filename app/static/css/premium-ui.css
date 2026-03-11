@@ -898,3 +898,229 @@ input:focus-visible {
         border: 2px solid currentColor;
     }
 }
+
+/* ============================================================================
+   INLINE REFERENCE BADGES — Small pill-style citations
+   ============================================================================ */
+
+.quran-inline-ref {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    color: #059669;
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.06));
+    border: 1px solid rgba(5, 150, 105, 0.2);
+    white-space: nowrap;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    vertical-align: baseline;
+}
+
+.quran-inline-ref:hover {
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.18), rgba(16, 185, 129, 0.1));
+    border-color: rgba(5, 150, 105, 0.35);
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.15);
+    transform: translateY(-1px);
+}
+
+.dark .quran-inline-ref {
+    color: #34d399;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.06));
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+.hadith-inline-ref {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 600;
+    color: #7c3aed;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.05));
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    white-space: nowrap;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    vertical-align: baseline;
+}
+
+.hadith-inline-ref:hover {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(124, 58, 237, 0.1));
+    border-color: rgba(139, 92, 246, 0.35);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
+    transform: translateY(-1px);
+}
+
+.dark .hadith-inline-ref {
+    color: #a78bfa;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(124, 58, 237, 0.06));
+    border-color: rgba(139, 92, 246, 0.25);
+}
+
+/* ============================================================================
+   ENHANCED CHAT MESSAGE ANIMATIONS — Staggered slide-up
+   ============================================================================ */
+
+.chat-message {
+    animation: msgAppear 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.chat-message:nth-last-child(1) { animation-delay: 0s; }
+.chat-message:nth-last-child(2) { animation-delay: 0.05s; }
+
+@keyframes msgAppear {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.97);
+        filter: blur(2px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+/* ============================================================================
+   WELCOME CARD STAGGER REVEAL
+   ============================================================================ */
+
+.example-card {
+    animation: cardReveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.example-card:nth-child(1) { animation-delay: 0.1s; }
+.example-card:nth-child(2) { animation-delay: 0.2s; }
+.example-card:nth-child(3) { animation-delay: 0.3s; }
+.example-card:nth-child(4) { animation-delay: 0.4s; }
+.example-card:nth-child(5) { animation-delay: 0.5s; }
+.example-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes cardReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================================================
+   STREAMING SHIMMER LOADING EFFECT
+   ============================================================================ */
+
+.streaming-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: linear-gradient(
+        90deg,
+        rgba(5, 150, 105, 0.06) 0%,
+        rgba(16, 185, 129, 0.12) 50%,
+        rgba(5, 150, 105, 0.06) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmerFlow 1.8s ease-in-out infinite;
+    border-radius: 14px;
+    border: 1px solid rgba(5, 150, 105, 0.15);
+}
+
+@keyframes shimmerFlow {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.dark .streaming-indicator {
+    background: linear-gradient(
+        90deg,
+        rgba(16, 185, 129, 0.06) 0%,
+        rgba(16, 185, 129, 0.15) 50%,
+        rgba(16, 185, 129, 0.06) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmerFlow 1.8s ease-in-out infinite;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* ============================================================================
+   GLASSMORPHIC SIDEBAR POLISH
+   ============================================================================ */
+
+#sidebar {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.35s ease;
+}
+
+#sidebar.open {
+    box-shadow: 8px 0 40px rgba(0, 0, 0, 0.15);
+}
+
+.dark #sidebar.open {
+    box-shadow: 8px 0 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================================
+   INPUT FOCUS GLOW RING
+   ============================================================================ */
+
+.chat-input-container:focus-within {
+    box-shadow:
+        0 6px 30px rgba(5, 150, 105, 0.12),
+        0 0 0 4px rgba(5, 150, 105, 0.08),
+        0 0 20px rgba(5, 150, 105, 0.06);
+}
+
+.dark .chat-input-container:focus-within {
+    box-shadow:
+        0 6px 30px rgba(16, 185, 129, 0.15),
+        0 0 0 4px rgba(16, 185, 129, 0.1),
+        0 0 20px rgba(16, 185, 129, 0.08);
+}
+
+/* ============================================================================
+   QURAN/HADITH BOX ENTRANCE ANIMATION
+   ============================================================================ */
+
+.quran-verse,
+.hadith-box {
+    animation: boxReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes boxReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ============================================================================
+   HEADER GRADIENT BORDER ACCENT
+   ============================================================================ */
+
+.chat-header {
+    position: relative;
+}
+
+.chat-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #059669, #10b981, #34d399, transparent);
+    opacity: 0.5;
+}

@@ -66,7 +66,7 @@ async def lifespan(app: FastAPI):
     # Open browser in background after a small delay
     def open_browser():
         import time
-        time.sleep(2)
+        time.sleep(1)
         try:
             webbrowser.open("http://127.0.0.1:8000")
         except Exception as exc:

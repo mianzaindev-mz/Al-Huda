@@ -3108,80 +3108,40 @@
 
             formattedText = parseQuranVerses(formattedText);
 
-            // Process simple Quran citations (legacy support)
+            // Simple Quran citations — render as inline badges, NOT full boxes
             formattedText = formattedText.replace(/\(Qur'an\s+([^)]+)\)/g, function (match, ref) {
-                return `\n\n<div class="quran-verse">
-            <div class="quran-verse-header">
-                <span class="quran-icon">📖</span>
-                <span class="quran-reference">Quran ${ref.trim()}</span>
-            </div>
-            <div class="quran-translation" style="color: #f59e0b;">⚠️ Please provide full verse with Arabic and translation</div>
-        </div>\n\n`;
+                return `<span class="quran-inline-ref">📖 Quran ${ref.trim()}</span>`;
             });
 
-            // Simple Quran reference format (legacy)
             formattedText = formattedText.replace(/\[Qur'an ([^\]]+)\]/g, function (match, ref) {
-                return `\n\n<div class="quran-verse">
-            <div class="quran-verse-header">
-                <span class="quran-icon">📖</span>
-                <span class="quran-reference">Quran ${ref.trim()}</span>
-            </div>
-            <div class="quran-translation" style="color: #f59e0b;">⚠️ Please provide full verse with Arabic and translation</div>
-        </div>\n\n`;
+                return `<span class="quran-inline-ref">📖 Quran ${ref.trim()}</span>`;
             });
 
-            // Process Hadith with full format - ENHANCED ERROR HANDLING
+            // Process Hadith with full format [Hadith:Ref|Text|Narrator] — these get full boxes
             formattedText = formattedText.replace(/\[Hadith:([^|]+)\|([^|]*)\|([^\]]*)\]/g, function (match, ref, text, narrator) {
                 const hadithText = text ? text.trim().replace(/^["']|["']$/g, '') : '';
                 const narratorText = narrator ? narrator.trim() : '';
 
-                // ERROR CHECK: Ensure hadith text exists
-                if (!hadithText) {
-                    console.warn('Hadith citation missing text:', ref);
-                    return `\n\n<div class="hadith-box">
-                <div class="hadith-header">
-                    <span class="hadith-icon">📜</span>
-                    <span class="hadith-reference">${ref.trim()}</span>
-                </div>
-                <div class="hadith-text" style="color: #ef4444;">⚠️ Hadith text missing - please provide full text</div>
-            </div>\n\n`;
-                }
-
                 return `\n\n<div class="hadith-box">
             <div class="hadith-header">
                 <span class="hadith-icon">📜</span>
                 <span class="hadith-reference">${ref.trim()}</span>
             </div>
-            <div class="hadith-text">"${hadithText}"</div>
+            ${hadithText ? `<div class="hadith-text">"${hadithText}"</div>` : ''}
             ${narratorText ? `<div class="hadith-narrator">${narratorText}</div>` : ''}
         </div>\n\n`;
             });
 
-            // Simple Hadith reference (legacy - should show warning)
+            // Simple Hadith/Sahih references — render as inline badges, NOT full boxes
             formattedText = formattedText.replace(/\[Hadith ([^\]]+)\]/g, function (match, ref) {
-                console.warn('Hadith citation without text:', ref);
-                return `\n\n<div class="hadith-box">
-            <div class="hadith-header">
-                <span class="hadith-icon">📜</span>
-                <span class="hadith-reference">${ref.trim()}</span>
-            </div>
-            <div class="hadith-text" style="color: #f59e0b;">⚠️ Please provide full hadith text with this reference</div>
-        </div>\n\n`;
+                return `<span class="hadith-inline-ref">📜 ${ref.trim()}</span>`;
             });
 
-            // Sahih references (legacy)
             formattedText = formattedText.replace(/\[Sahih ([^\]]+)\]/g, function (match, ref) {
-                console.warn('Sahih citation without text:', ref);
-                return `\n\n<div class="hadith-box">
-            <div class="hadith-header">
-                <span class="hadith-icon">📜</span>
-                <span class="hadith-reference">Sahih ${ref.trim()}</span>
-            </div>
-            <div class="hadith-text" style="color: #f59e0b;">⚠️ Please provide full hadith text with this reference</div>
-        </div>\n\n`;
+                return `<span class="hadith-inline-ref">📜 Sahih ${ref.trim()}</span>`;
             });
 
-            // General reference box
+            // General reference box — keep as structured box (requires explicit pipe syntax)
             formattedText = formattedText.replace(/\[Reference:([^|]+)\|([^\]]+)\]/g, function (match, title, content) {
                 return `\n\n<div class="reference-box">
             <div class="reference-header">
