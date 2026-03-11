@@ -301,11 +301,24 @@ function IntroAnimation({ onComplete }) {
 
     return h('div', { style: overlayStyle, className: 'react-intro' },
 
+        // ── Ambient Background Glow ──
+        h('div', {
+            style: {
+                position: 'absolute', inset: 0,
+                backgroundImage: `
+                    radial-gradient(ellipse at 30% 20%, rgba(5, 150, 105, 0.06) 0%, transparent 50%),
+                    radial-gradient(ellipse at 70% 80%, rgba(217, 171, 95, 0.04) 0%, transparent 50%),
+                    radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 60%)
+                `,
+                animation: 'glowPulse 6s ease-in-out infinite',
+            }
+        }),
+
         // ── Starfield Background ──
-        h(Starfield, { count: 60 }),
+        h(Starfield, { count: 80 }),
 
         // ── Floating Motes ──
-        h(FloatingMotes, { count: 25, visible: isRevealed }),
+        h(FloatingMotes, { count: 30, visible: isRevealed }),
 
         // ── Center Assembly ──
         h('div', { style: centerStyle },
@@ -315,17 +328,48 @@ function IntroAnimation({ onComplete }) {
 
             // Geometric rings (Islamic-inspired rotating patterns)
             h(GeometricRing, {
-                size: 300, duration: 25, opacity: isRevealed ? 0.15 : 0,
-                borderStyle: '1px solid rgba(16, 185, 129, 0.15)',
+                size: 320, duration: 30, opacity: isRevealed ? 0.12 : 0,
+                borderStyle: '1px solid rgba(16, 185, 129, 0.12)',
             }),
             h(GeometricRing, {
-                size: 260, duration: 18, reverse: true, opacity: isRevealed ? 0.12 : 0,
-                borderStyle: '1px dashed rgba(217, 171, 95, 0.12)',
+                size: 270, duration: 20, reverse: true, opacity: isRevealed ? 0.15 : 0,
+                borderStyle: '1px dashed rgba(217, 171, 95, 0.14)',
             }),
             h(GeometricRing, {
-                size: 220, duration: 30, opacity: isRevealed ? 0.1 : 0,
+                size: 220, duration: 35, opacity: isRevealed ? 0.1 : 0,
                 borderStyle: '1px solid rgba(52, 211, 153, 0.1)',
             }),
+            h(GeometricRing, {
+                size: 180, duration: 15, reverse: true, opacity: isRevealed ? 0.08 : 0,
+                borderStyle: '1px dotted rgba(217, 171, 95, 0.1)',
+            }),
+
+            // 8-Pointed Islamic Star (Rub el Hizb inspired)
+            h('div', {
+                style: {
+                    position: 'absolute',
+                    width: 200, height: 200,
+                    top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    opacity: isRevealed ? 0.12 : 0,
+                    transition: 'opacity 1.5s ease 0.3s',
+                    animation: isRevealed ? 'orbit 40s linear infinite reverse' : 'none',
+                },
+            },
+                h('svg', { viewBox: '0 0 100 100', width: '100%', height: '100%' },
+                    // Two overlapping rotated squares → 8-pointed star
+                    h('rect', {
+                        x: 22, y: 22, width: 56, height: 56,
+                        fill: 'none', stroke: 'rgba(217, 171, 95, 0.35)', strokeWidth: 0.8,
+                        transform: 'rotate(0 50 50)',
+                    }),
+                    h('rect', {
+                        x: 22, y: 22, width: 56, height: 56,
+                        fill: 'none', stroke: 'rgba(16, 185, 129, 0.3)', strokeWidth: 0.8,
+                        transform: 'rotate(45 50 50)',
+                    })
+                )
+            ),
 
             // Light rays
             h(LightRays, { visible: isRadiating }),
@@ -336,7 +380,7 @@ function IntroAnimation({ onComplete }) {
             // Moon icon
             h('span', {
                 className: 'material-symbols-outlined',
-                style: moonStyle,
+                style: { ...moonStyle, fontSize: 140 },
             }, 'dark_mode'),
         ),
 

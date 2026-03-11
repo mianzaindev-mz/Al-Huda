@@ -94,7 +94,7 @@
 
 /* Paragraphs - Improved spacing and readability */
 .message-content p {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.35rem;
     line-height: 1.85;
     text-align: left;
     hyphens: auto;
@@ -105,84 +105,104 @@
     margin-bottom: 0;
 }
 
-/* Add breathing room between paragraphs */
-.message-content p+p {
-    margin-top: 0.5rem;
+/* Breathing room between consecutive paragraphs */
+.message-content p + p {
+    margin-top: 0.75rem;
 }
 
-/* Horizontal rules / dividers - generous spacing */
+/* ============================================================================
+   HORIZONTAL RULES / DIVIDERS
+   ============================================================================ */
+
 .message-content hr {
     border: none;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(5, 150, 105, 0.25), transparent);
-    margin: 2rem 0;
+    background: linear-gradient(90deg, transparent, rgba(5, 150, 105, 0.3), transparent);
+    margin: 2.25rem 0;
 }
 
 .dark .message-content hr {
-    background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.25), transparent);
+    background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.3), transparent);
 }
 
-/* Spacing between headings and content */
-.message-content h1 + p,
-.message-content h2 + p,
-.message-content h3 + p,
-.message-content h4 + p {
-    margin-top: 0.5rem;
-}
+/* ============================================================================
+   HEADING HIERARCHY — Clear, distinct sizes with visual separators
+   ============================================================================ */
 
-/* Spacing before headings (when they follow a paragraph) */
-.message-content p + h1,
-.message-content p + h2,
-.message-content p + h3,
-.message-content p + h4 {
-    margin-top: 1.75rem;
-}
-
-/* Spacing around Quran/Hadith boxes */
-.message-content .quran-verse,
-.message-content .hadith-box {
-    margin: 1.75rem 0;
-}
-
-/* Spacing around lists */
-.message-content ul,
-.message-content ol {
-    margin: 1rem 0;
-}
-
-/* Headings - Clear hierarchy with color coding */
+/* Base heading styles */
 .message-content h1,
 .message-content h2,
 .message-content h3,
 .message-content h4 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.625rem;
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.3;
+    position: relative;
 }
 
+/* ── H1 — Main Topic Heading ────────────────────── */
 .message-content h1 {
-    font-size: 1.5rem;
-    color: #059669;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(5, 150, 105, 0.2);
+    font-size: 1.75rem;
+    color: #047857;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2.5px solid rgba(5, 150, 105, 0.25);
+    letter-spacing: -0.01em;
 }
 
+/* ── H2 — Section Heading with left accent bar ──── */
 .message-content h2 {
-    font-size: 1.3rem;
-    color: #10b981;
+    font-size: 1.4rem;
+    color: #059669;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    padding-left: 14px;
+    border-left: 3px solid #10b981;
 }
 
+/* Auto-separator line above H2 (when it follows other content) */
+.message-content p + h2,
+.message-content ul + h2,
+.message-content ol + h2,
+.message-content div + h2,
+.message-content blockquote + h2 {
+    padding-top: 1.75rem;
+}
+
+.message-content p + h2::before,
+.message-content ul + h2::before,
+.message-content ol + h2::before,
+.message-content div + h2::before,
+.message-content blockquote + h2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(5, 150, 105, 0.2), rgba(5, 150, 105, 0.12), transparent);
+}
+
+/* ── H3 — Sub-section Heading ───────────────────── */
 .message-content h3 {
-    font-size: 1.15rem;
-    color: #34d399;
+    font-size: 1.2rem;
+    color: #10b981;
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
 }
 
+/* ── H4 — Minor Heading ─────────────────────────── */
 .message-content h4 {
     font-size: 1.05rem;
-    color: #6ee7b7;
+    color: #34d399;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-style: italic;
 }
 
+/* ── Dark Mode Heading Colors ────────────────────── */
 .dark .message-content h1 {
     color: #34d399;
     border-bottom-color: rgba(52, 211, 153, 0.25);
@@ -190,6 +210,11 @@
 
 .dark .message-content h2 {
     color: #6ee7b7;
+    border-left-color: #34d399;
+}
+
+.dark .message-content h2::before {
+    background: linear-gradient(90deg, rgba(52, 211, 153, 0.2), rgba(52, 211, 153, 0.08), transparent);
 }
 
 .dark .message-content h3 {
@@ -200,12 +225,48 @@
     color: #d1fae5;
 }
 
-/* First heading shouldn't have top margin */
+/* First heading shouldn't have top margin or separator */
 .message-content>h1:first-child,
 .message-content>h2:first-child,
 .message-content>h3:first-child,
 .message-content>h4:first-child {
     margin-top: 0;
+    padding-top: 0;
+}
+
+.message-content>h2:first-child::before {
+    display: none;
+}
+
+/* ============================================================================
+   ELEMENT SPACING — Consistent vertical rhythm
+   ============================================================================ */
+
+/* Spacing between headings and following content */
+.message-content h1 + p,
+.message-content h2 + p,
+.message-content h3 + p,
+.message-content h4 + p {
+    margin-top: 0.5rem;
+}
+
+/* Spacing before headings after paragraphs */
+.message-content p + h1,
+.message-content p + h3,
+.message-content p + h4 {
+    margin-top: 2rem;
+}
+
+/* Spacing around Quran/Hadith boxes */
+.message-content .quran-verse,
+.message-content .hadith-box {
+    margin: 2rem 0;
+}
+
+/* Spacing around lists */
+.message-content ul,
+.message-content ol {
+    margin: 1.25rem 0;
 }
 
 /* Strong text emphasis */
