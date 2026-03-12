@@ -109,24 +109,10 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Enhanced Chat Message Animations */
+        /* Chat Message - always visible, simple slide-up */
         .chat-message {
-            animation: messageSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             margin-bottom: 2rem;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-
-        @keyframes messageSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px) scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            opacity: 1;
         }
 
         /* User Message Bubble - Modern Style */
@@ -1892,9 +1878,12 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 relative z-10">
-                    <button onclick="showProfile()"
-                        class="flex items-center space-x-2 text-sm text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary-light transition-all px-3 py-2 rounded-lg hover:bg-slate-100/50 dark:hover:bg-primary/10">
-                        <span class="material-symbols-outlined text-lg">person</span>
+                    <button onclick="showProfile()" id="headerProfileBtn"
+                        class="flex items-center space-x-2 text-sm text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary-light transition-all px-2 py-2 rounded-lg hover:bg-slate-100/50 dark:hover:bg-primary/10">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center overflow-hidden border-2 border-transparent hover:border-primary/30 transition-all relative">
+                            <span class="material-symbols-outlined text-white text-base" id="headerProfileIcon">person</span>
+                            <img id="headerProfileImage" src="" alt="Profile" style="width:100%;height:100%;object-fit:cover;display:none;position:absolute;">
+                        </div>
                     </button>
                 </div>
             </header>
@@ -2012,7 +2001,7 @@
                                 <!-- Send/Stop Button Container -->
                                 <div class="send-stop-wrapper relative">
                                     <!-- Send Button (default) -->
-                                    <button id="welcomeSendButton" onclick="sendMessageFromWelcome()"
+                                    <button id="welcomeSendButton"
                                         class="btn-ripple w-10 h-10 md:w-11 md:h-11 flex-shrink-0 rounded-xl bg-gradient-to-r from-primary to-secondary text-white flex items-center justify-center hover:shadow-lg hover:shadow-primary/40 transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 disabled:hover:scale-100">
                                         <span class="material-symbols-outlined text-lg md:text-xl">arrow_upward</span>
                                     </button>
@@ -2048,8 +2037,8 @@
 
             <!-- Chat Container -->
             <section id="chatContainer"
-                class="hidden flex-1 overflow-y-auto px-4 md:px-6 lg:px-8 pb-6 bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-950 dark:to-black">
-                <div id="chatMessages" class="space-y-0 w-full max-w-5xl mx-auto py-8">
+                class="hidden flex-1 flex flex-col overflow-y-auto px-4 md:px-6 lg:px-8 pb-6 bg-gradient-to-b from-white via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-950 dark:to-black">
+                <div id="chatMessages" class="space-y-0 w-full max-w-5xl mx-auto py-8 flex-grow-0">
                     <!-- Messages will be added here -->
                 </div>
             </section>
@@ -2107,7 +2096,7 @@
                             <!-- Send/Stop Button Container -->
                             <div class="send-stop-wrapper relative">
                                 <!-- Send Button (default) -->
-                                <button id="chatSendButton" onclick="sendMessage()"
+                                <button id="chatSendButton"
                                     class="btn-ripple w-11 h-11 flex-shrink-0 rounded-xl bg-gradient-to-r from-primary to-secondary text-white flex items-center justify-center hover:shadow-lg hover:shadow-primary/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 active:scale-95 disabled:hover:scale-100">
                                     <span class="material-symbols-outlined text-xl">arrow_upward</span>
                                 </button>
@@ -2349,6 +2338,23 @@
             } else if (sidebarIcon) {
                 sidebarIcon.style.display = 'block';
                 if (sidebarImage) sidebarImage.style.display = 'none';
+            }
+
+            // Update header profile avatar
+            const headerImage = document.getElementById('headerProfileImage');
+            const headerIcon = document.getElementById('headerProfileIcon');
+            if (headerImage && userProfile.image_path) {
+                headerImage.src = userProfile.image_path;
+                headerImage.style.display = 'block';
+                if (headerIcon) headerIcon.style.display = 'none';
+            } else if (headerIcon) {
+                headerIcon.style.display = 'block';
+                if (headerImage) headerImage.style.display = 'none';
+            }
+
+            // Store for user message avatars
+            if (userProfile.image_path) {
+                localStorage.setItem('userImage', userProfile.image_path);
             }
         }
 
@@ -2639,9 +2645,14 @@
         // Auto-save on message send
         const originalSendMessageStreaming = sendMessageStreaming;
         sendMessageStreaming = async function (...args) {
-            const result = await originalSendMessageStreaming.apply(this, args);
-            saveCurrentChat();
-            return result;
+            try {
+                const result = await originalSendMessageStreaming.apply(this, args);
+                saveCurrentChat();
+                return result;
+            } catch (e) {
+                isSending = false; // Reset on error in wrapper
+                throw e;
+            }
         };
 
         // ========================================
@@ -3759,12 +3770,17 @@
             }
         }
 
+        let isSending = false;
+
         // Main streaming function
         async function sendMessageStreaming(message, isFromWelcome = false, skipAddingUserMessage = false) {
             if (!message) return;
+            if (isSending) return; // Prevent concurrent sends
+            isSending = true;
 
             if (message.length > 5000) {
                 showToast('❌ Message is too long. Please keep it under 5000 characters.');
+                isSending = false;
                 return;
             }
 
@@ -3853,6 +3869,7 @@
             } finally {
                 currentStream = null;
                 currentBotMessageElement = null;
+                isSending = false;
                 hideStreamingControls(isFromWelcome);
                 input.focus();
             }
@@ -3995,9 +4012,13 @@
         function addMessage(text, sender, enableEdit = true) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `chat-message w-full`;
+            // Force visibility — bypass any cached CSS animations
+            messageDiv.style.opacity = '1';
+            messageDiv.style.visibility = 'visible';
 
             if (sender === 'user') {
                 messageDiv.className += ' flex flex-col items-end gap-1 group';
+                messageDiv.style.display = 'flex';
 
                 // Create a row for the message bubble and avatar
                 const messageRow = document.createElement('div');
@@ -4112,6 +4133,8 @@
         }
 
         async function newChat() {
+            // Reset sending state
+            isSending = false;
             // Abort any pending fetch requests
             if (currentAbortController) {
                 currentAbortController.abort();
@@ -4165,6 +4188,21 @@
         // Event Listeners
         welcomeSendButton.addEventListener('click', sendMessageFromWelcome);
         chatSendButton.addEventListener('click', sendMessage);
+
+        // Enter key to send (Shift+Enter for new line)
+        welcomeInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessageFromWelcome();
+            }
+        });
+
+        chatInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
 
         welcomeInput.addEventListener('input', function () {
             autoResize(this);

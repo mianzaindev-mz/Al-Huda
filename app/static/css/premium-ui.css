@@ -965,27 +965,11 @@ input:focus-visible {
    ENHANCED CHAT MESSAGE ANIMATIONS — Staggered slide-up
    ============================================================================ */
 
-/* Chat messages appear smoothly — animation only plays on initial DOM insertion */
+/* Chat messages — simple transition, no animation to avoid opacity bugs */
 .chat-message {
-    animation: msgAppear 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* Only animate the newest message, not older ones */
-.chat-message:not(:last-child) {
-    animation: none;
-}
-
-@keyframes msgAppear {
-    from {
-        opacity: 0;
-        transform: translateY(16px) scale(0.97);
-        filter: blur(2px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0);
-    }
+    opacity: 1 !important;
+    transform: translateY(0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 /* ============================================================================
