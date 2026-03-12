@@ -1,0 +1,307 @@
+/* ============================================================================
+   GLASSMORPHIC NAVIGATION BAR
+   Always-visible floating nav with icon-only default, expands on hover.
+   ============================================================================ */
+
+/* ── Container: Vertical pill on left edge ──────────────────────────── */
+.glass-nav {
+    position: fixed;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+
+    width: 56px;
+    border-radius: 20px;
+    overflow: hidden;
+
+    /* Glassmorphism — very transparent */
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(32px) saturate(200%);
+    -webkit-backdrop-filter: blur(32px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+    /* Smooth expand */
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.35s ease;
+}
+
+.glass-nav:hover {
+    width: 180px;
+    box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.12),
+        0 4px 16px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* ── Dark mode ──────────────────────────────────────────────────────── */
+.dark .glass-nav {
+    background: rgba(15, 23, 42, 0.35);
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .glass-nav:hover {
+    box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.4),
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ── Nav Item ───────────────────────────────────────────────────────── */
+.glass-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    width: 100%;
+    height: 44px;
+    padding: 0 8px;
+    border-radius: 12px;
+    border: none;
+    background: transparent;
+    color: #475569;
+    cursor: pointer;
+
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.glass-nav-item:hover {
+    background: rgba(5, 150, 105, 0.08);
+    color: #059669;
+}
+
+.glass-nav-item:active {
+    transform: scale(0.95);
+}
+
+.glass-nav-item.active {
+    background: rgba(5, 150, 105, 0.12);
+    color: #059669;
+}
+
+/* Dark mode items */
+.dark .glass-nav-item {
+    color: #94a3b8;
+}
+
+.dark .glass-nav-item:hover {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+}
+
+.dark .glass-nav-item.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+/* ── Icon ────────────────────────────────────────────────────────────── */
+.glass-nav-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                font-size 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.glass-nav:hover .glass-nav-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.glass-nav-item:hover .glass-nav-icon {
+    transform: scale(1.15);
+}
+
+/* ── Label ───────────────────────────────────────────────────────────── */
+.glass-nav-label {
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: opacity 0.2s ease 0s,
+                max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                margin-left 0.3s ease;
+    margin-left: 0;
+    pointer-events: none;
+}
+
+.glass-nav:hover .glass-nav-label {
+    opacity: 1;
+    max-width: 120px;
+    margin-left: 12px;
+    transition: opacity 0.25s ease 0.1s,
+                max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                margin-left 0.3s ease;
+}
+
+/* ── Separator Line ──────────────────────────────────────────────────── */
+.glass-nav-separator {
+    width: calc(100% - 12px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.08), transparent);
+    margin: 4px 6px;
+    flex-shrink: 0;
+}
+
+.dark .glass-nav-separator {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+}
+
+/* ── Active indicator dot ────────────────────────────────────────────── */
+.glass-nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 16px;
+    border-radius: 3px;
+    background: linear-gradient(to bottom, #059669, #10b981);
+    box-shadow: 0 0 8px rgba(5, 150, 105, 0.4);
+}
+
+/* ── Hover glow effect ───────────────────────────────────────────────── */
+.glass-nav-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    opacity: 0;
+    background: radial-gradient(circle at center, rgba(5, 150, 105, 0.12), transparent 70%);
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.glass-nav-item:hover::after {
+    opacity: 1;
+}
+
+/* ── Tooltip (for collapsed state only) ──────────────────────────────── */
+.glass-nav-tooltip {
+    position: absolute;
+    left: calc(100% + 12px);
+    top: 50%;
+    transform: translateY(-50%) scale(0.9);
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.9);
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+}
+
+/* Show tooltip only when nav is collapsed */
+.glass-nav:not(:hover) .glass-nav-item:hover .glass-nav-tooltip {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+/* ============================================================================
+   RESPONSIVE — Mobile: horizontal bottom bar
+   ============================================================================ */
+@media (max-width: 768px) {
+    .glass-nav {
+        left: 50%;
+        top: auto;
+        bottom: 16px;
+        transform: translateX(-50%);
+
+        flex-direction: row;
+        width: auto !important;
+        max-width: calc(100vw - 32px);
+        height: 56px;
+        padding: 8px 12px;
+        gap: 2px;
+        border-radius: 28px;
+    }
+
+    .glass-nav:hover {
+        width: auto !important;
+    }
+
+    .glass-nav-item {
+        width: 42px;
+        height: 42px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 14px;
+    }
+
+    /* Hide labels on mobile, always */
+    .glass-nav-label {
+        display: none !important;
+    }
+
+    .glass-nav-icon {
+        font-size: 22px !important;
+        width: 22px !important;
+        height: 22px !important;
+    }
+
+    /* Separator is vertical on mobile */
+    .glass-nav-separator {
+        width: 1px;
+        height: calc(100% - 16px);
+        margin: 8px 4px;
+    }
+
+    /* Tooltip goes above on mobile */
+    .glass-nav-tooltip {
+        left: 50%;
+        top: auto;
+        bottom: calc(100% + 10px);
+        transform: translateX(-50%) scale(0.9);
+    }
+
+    .glass-nav:not(:hover) .glass-nav-item:hover .glass-nav-tooltip {
+        transform: translateX(-50%) scale(1);
+    }
+
+    /* Active indicator on bottom */
+    .glass-nav-item.active::before {
+        left: 50%;
+        top: auto;
+        bottom: 2px;
+        transform: translateX(-50%);
+        width: 16px;
+        height: 3px;
+    }
+}
+
+/* ============================================================================
+   MAIN CONTENT OFFSET — make room for the nav on desktop
+   ============================================================================ */
+@media (min-width: 769px) {
+    .app-content-with-nav {
+        margin-left: 80px;
+    }
+}
