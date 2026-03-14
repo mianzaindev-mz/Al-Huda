@@ -1716,40 +1716,59 @@
 }
 
 /* ============================================================================
-   SEARCH MODAL STYLES
+   SEARCH MODAL STYLES — Premium Redesign
    ============================================================================ */
 
 .search-input-container {
     position: relative;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
 }
 
 .search-input {
     width: 100%;
-    padding: 0.875rem 1rem 0.875rem 3rem;
-    border: 2px solid rgba(5, 150, 105, 0.2);
+    padding: 1rem 3rem 1rem 3.25rem;
+    border: 2px solid rgba(5, 150, 105, 0.15);
     border-radius: 1rem;
-    background: white;
-    color: #334155;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9));
+    color: #1e293b;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+}
+
+.search-input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
 }
 
 .search-input:focus {
     outline: none;
     border-color: #059669;
-    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+    box-shadow:
+        0 0 0 4px rgba(5, 150, 105, 0.1),
+        0 8px 25px rgba(5, 150, 105, 0.12);
+    transform: translateY(-1px);
+    background: white;
 }
 
 .dark .search-input {
-    background: #0f172a;
-    border-color: rgba(16, 185, 129, 0.2);
-    color: #e2e8f0;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+    border-color: rgba(16, 185, 129, 0.18);
+    color: #f1f5f9;
+}
+
+.dark .search-input::placeholder {
+    color: #64748b;
 }
 
 .dark .search-input:focus {
     border-color: #10b981;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    box-shadow:
+        0 0 0 4px rgba(16, 185, 129, 0.12),
+        0 8px 25px rgba(16, 185, 129, 0.1);
+    background: #0f172a;
 }
 
 .search-input-icon {
@@ -1757,7 +1776,96 @@
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 22px;
+    transition: color 0.3s ease;
+    pointer-events: none;
+}
+
+.search-input:focus ~ .search-input-icon,
+.search-input-container:focus-within .search-input-icon {
+    color: #059669;
+}
+
+.dark .search-input:focus ~ .search-input-icon,
+.dark .search-input-container:focus-within .search-input-icon {
+    color: #34d399;
+}
+
+/* Keyboard shortcut badge */
+.search-shortcut-badge {
+    position: absolute;
+    right: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    background: rgba(5, 150, 105, 0.08);
+    border: 1px solid rgba(5, 150, 105, 0.15);
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
     color: #64748b;
+    letter-spacing: 0.03em;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+}
+
+.search-input:focus ~ .search-shortcut-badge {
+    opacity: 0;
+}
+
+.dark .search-shortcut-badge {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+    color: #94a3b8;
+}
+
+/* Clear button inside search */
+.search-clear-btn {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(5, 150, 105, 0.1);
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 18px;
+}
+
+.search-clear-btn:hover {
+    background: rgba(5, 150, 105, 0.2);
+    color: #059669;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.dark .search-clear-btn {
+    background: rgba(16, 185, 129, 0.12);
+    color: #94a3b8;
+}
+
+.dark .search-clear-btn:hover {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+.search-clear-btn.visible {
+    display: flex;
+}
+
+.search-clear-btn.visible ~ .search-shortcut-badge {
+    display: none;
 }
 
 .search-results {
@@ -1766,37 +1874,250 @@
 }
 
 .search-result-item {
-    padding: 1rem;
-    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 0.875rem;
     margin-bottom: 0.5rem;
-    background: rgba(5, 150, 105, 0.04);
-    border: 1px solid transparent;
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.04), rgba(16, 185, 129, 0.02));
+    border: 1px solid rgba(5, 150, 105, 0.08);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .search-result-item:hover {
-    background: rgba(5, 150, 105, 0.08);
-    border-color: rgba(5, 150, 105, 0.2);
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.1), rgba(16, 185, 129, 0.06));
+    border-color: rgba(5, 150, 105, 0.25);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.1);
 }
 
 .dark .search-result-item {
-    background: rgba(16, 185, 129, 0.06);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(16, 185, 129, 0.03));
+    border-color: rgba(16, 185, 129, 0.1);
 }
 
 .dark .search-result-item:hover {
-    background: rgba(16, 185, 129, 0.1);
-    border-color: rgba(16, 185, 129, 0.25);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.06));
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 .search-result-highlight {
-    background: rgba(5, 150, 105, 0.2);
-    padding: 0 2px;
-    border-radius: 2px;
+    background: linear-gradient(135deg, rgba(5, 150, 105, 0.25), rgba(16, 185, 129, 0.2));
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-weight: 600;
 }
 
 .dark .search-result-highlight {
-    background: rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(52, 211, 153, 0.25));
+}
+
+/* ============================================================================
+   PROFILE MODAL STYLES — Premium Redesign
+   ============================================================================ */
+
+.profile-image-container {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #059669, #10b981, #34d399);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 4px solid rgba(5, 150, 105, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+        0 8px 25px rgba(5, 150, 105, 0.25),
+        0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.profile-image-container:hover {
+    transform: scale(1.05) translateY(-2px);
+    border-color: rgba(5, 150, 105, 0.4);
+    box-shadow:
+        0 12px 35px rgba(5, 150, 105, 0.35),
+        0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 50%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.dark .profile-image-container {
+    border-color: rgba(16, 185, 129, 0.25);
+    box-shadow:
+        0 8px 25px rgba(16, 185, 129, 0.15),
+        0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark .profile-image-container:hover {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow:
+        0 12px 35px rgba(16, 185, 129, 0.25),
+        0 5px 12px rgba(0, 0, 0, 0.25);
+}
+
+.profile-upload-hint {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    transition: color 0.2s ease;
+}
+
+.profile-upload-hint .material-symbols-outlined {
+    font-size: 14px;
+}
+
+.dark .profile-upload-hint {
+    color: #64748b;
+}
+
+.profile-input-group {
+    text-align: left;
+    margin-bottom: 1.75rem;
+}
+
+.profile-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 0.625rem;
+}
+
+.dark .profile-label {
+    color: #94a3b8;
+}
+
+.profile-input {
+    width: 100%;
+    padding: 0.875rem 1.125rem;
+    border: 2px solid rgba(5, 150, 105, 0.15);
+    border-radius: 0.875rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1e293b;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.9));
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    box-sizing: border-box;
+    letter-spacing: 0.01em;
+}
+
+.profile-input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.profile-input:focus {
+    border-color: #059669;
+    box-shadow:
+        0 0 0 4px rgba(5, 150, 105, 0.1),
+        0 4px 16px rgba(5, 150, 105, 0.1);
+    transform: translateY(-1px);
+    background: white;
+}
+
+.dark .profile-input {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+    border-color: rgba(16, 185, 129, 0.18);
+    color: #f1f5f9;
+}
+
+.dark .profile-input::placeholder {
+    color: #64748b;
+}
+
+.dark .profile-input:focus {
+    border-color: #10b981;
+    box-shadow:
+        0 0 0 4px rgba(16, 185, 129, 0.12),
+        0 4px 16px rgba(16, 185, 129, 0.08);
+    background: #0f172a;
+}
+
+.profile-save-btn {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+    background-size: 200% 200%;
+    color: white;
+    border: none;
+    border-radius: 0.875rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    box-shadow:
+        0 4px 15px rgba(5, 150, 105, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-save-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.profile-save-btn:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow:
+        0 8px 30px rgba(5, 150, 105, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    background-position: 100% 100%;
+}
+
+.profile-save-btn:hover::before {
+    opacity: 1;
+}
+
+.profile-save-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.profile-save-btn .material-symbols-outlined {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.profile-save-btn:hover .material-symbols-outlined {
+    transform: scale(1.15);
+}
+
+.dark .profile-save-btn {
+    box-shadow:
+        0 4px 15px rgba(5, 150, 105, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark .profile-save-btn:hover {
+    box-shadow:
+        0 8px 30px rgba(16, 185, 129, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* ============================================================================

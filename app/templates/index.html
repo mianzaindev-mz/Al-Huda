@@ -106,7 +106,13 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.5s ease;
+            animation: bodyFallbackReveal 0.5s ease 3s forwards;
+        }
+
+        /* Safety net: if React intro fails to load, body becomes visible after 3s */
+        @keyframes bodyFallbackReveal {
+            to { opacity: 1; }
         }
 
         /* Chat Message - always visible, simple slide-up */
