@@ -8,6 +8,7 @@ User profile management endpoints:
 """
 
 import logging
+import re
 import uuid
 from pathlib import Path
 from typing import Any, Dict
@@ -28,6 +29,18 @@ _ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/gif", "image/webp"}
 _ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 _MAX_IMAGE_BYTES = 5 * 1024 * 1024  # 5 MB
 
+# User ID validation pattern — only alphanumeric, underscores, hyphens allowed
+_USER_ID_PATTERN = re.compile(r"^[a-zA-Z0-9_\-]{1,128}$")
+
+
+def _validate_user_id(user_id: str) -> str:
+    """Sanitise and validate a user_id to prevent path traversal attacks."""
+    if ".." in user_id or "/" in user_id or "\\" in user_id:
+        raise HTTPException(status_code=400, detail="Invalid user ID: path traversal characters detected")
+    if not _USER_ID_PATTERN.match(user_id):
+        raise HTTPException(status_code=400, detail="Invalid user ID: only alphanumeric, underscore, and hyphen allowed (max 128 chars)")
+    return user_id
+
 
 # ---------------------------------------------------------------------------
 # GET profile
@@ -36,6 +49,7 @@ _MAX_IMAGE_BYTES = 5 * 1024 * 1024  # 5 MB
 @router.get("/{user_id}")
 async def get_profile(user_id: str):
     """Return the stored profile for *user_id*, or sensible defaults."""
+    user_id = _validate_user_id(user_id)
     try:
         profile = user_profiles.get(user_id, {"name": "User", "image_path": None})
         return {"status": "success", "profile": profile}
@@ -51,6 +65,7 @@ async def get_profile(user_id: str):
 @router.post("/{user_id}")
 async def update_profile(user_id: str, profile: UserProfile):
     """Merge *profile* fields into the existing user record."""
+    user_id = _validate_user_id(user_id)
     try:
         existing = user_profiles.get(user_id, {})
         existing["name"] = profile.name
@@ -75,6 +90,7 @@ async def upload_profile_image(user_id: str, file: UploadFile = File(...)):
     Validates file type (MIME + extension) and size (≤ 5 MB).
     Deletes any previous avatar to avoid orphaned files.
     """
+    user_id = _validate_user_id(user_id)
     try:
         # Validate MIME type
         if file.content_type not in _ALLOWED_CONTENT_TYPES:

@@ -11,6 +11,7 @@ This file is intentionally kept slim. All logic lives in:
 
 import asyncio
 import logging
+import os
 import threading
 import webbrowser
 from contextlib import asynccontextmanager
@@ -88,10 +89,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Allow all origins (restrict in production as needed)
+# CORS — restrict to known origins (override via ALLOWED_ORIGINS env var)
+_default_origins = ["http://127.0.0.1:8000", "http://localhost:8000"]
+_allowed_origins = os.environ.get("ALLOWED_ORIGINS", "").split(",")
+_allowed_origins = [o.strip() for o in _allowed_origins if o.strip()] or _default_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

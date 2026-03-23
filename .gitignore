@@ -28,6 +28,9 @@ API.txt
 
 # Persisted vector database (~500 MB — regenerated on first run)
 vector_db.pkl
+vector_db.pkl.bak
+vector_db.faiss
+vector_db_meta.json
 vector_db/
 
 # Compressed archives

@@ -7,6 +7,7 @@ automatic persistence, and runtime statistics.
 """
 
 import asyncio
+import json
 import logging
 import os
 import pickle
@@ -168,34 +169,76 @@ class VectorDatabase:
     # Persistence
     # ------------------------------------------------------------------
 
+    # ------------------------------------------------------------------
+    # Persistence path helpers
+    # ------------------------------------------------------------------
+
+    @property
+    def _faiss_index_path(self) -> str:
+        """Path for the native FAISS index file."""
+        base = self.index_file.replace(".pkl", "")
+        return f"{base}.faiss"
+
+    @property
+    def _meta_path(self) -> str:
+        """Path for the JSON sidecar (texts + metadata)."""
+        base = self.index_file.replace(".pkl", "")
+        return f"{base}_meta.json"
+
     def save(self) -> None:
-        """Pickle the index, texts, and metadata to disk."""
+        """Persist the FAISS index natively and texts/metadata as JSON."""
         try:
-            data = {
-                "texts": self.texts,
-                "metadata": self.metadata,
-                "index": faiss.serialize_index(self.index),
-            }
-            with open(self.index_file, "wb") as fh:
-                pickle.dump(data, fh)
-            logger.info(f"VectorDatabase saved → {self.index_file}")
+            faiss.write_index(self.index, self._faiss_index_path)
+            sidecar = {"texts": self.texts, "metadata": self.metadata}
+            with open(self._meta_path, "w", encoding="utf-8") as fh:
+                json.dump(sidecar, fh, ensure_ascii=False)
+            logger.info(f"VectorDatabase saved → {self._faiss_index_path}")
         except Exception as exc:
             logger.error(f"save failed: {exc}")
 
     def load(self) -> None:
-        """Restore index, texts, and metadata from disk if the file exists."""
-        if not os.path.exists(self.index_file):
-            logger.info("No existing vector database found — starting fresh")
-            return
-        try:
-            with open(self.index_file, "rb") as fh:
-                data = pickle.load(fh)
-            self.texts = data["texts"]
-            self.metadata = data["metadata"]
-            self.index = faiss.deserialize_index(data["index"])
-            logger.info(f"VectorDatabase loaded — {len(self.texts)} entries")
-        except Exception as exc:
-            logger.error(f"load failed: {exc} — starting with empty database")
+        """Restore index and metadata from disk.
+
+        Supports three scenarios:
+          1. New-format files (.faiss + _meta.json) exist → load them.
+          2. Only legacy .pkl file exists → migrate it to the new format.
+          3. Nothing exists → start fresh.
+        """
+        # --- Try new format first ---
+        if os.path.exists(self._faiss_index_path) and os.path.exists(self._meta_path):
+            try:
+                self.index = faiss.read_index(self._faiss_index_path)
+                with open(self._meta_path, "r", encoding="utf-8") as fh:
+                    sidecar = json.load(fh)
+                self.texts = sidecar["texts"]
+                self.metadata = sidecar["metadata"]
+                logger.info(f"VectorDatabase loaded (native) — {len(self.texts)} entries")
+                return
+            except Exception as exc:
+                logger.error(f"load (native) failed: {exc} — trying legacy format")
+
+        # --- Fallback: legacy pickle migration ---
+        if os.path.exists(self.index_file):
+            try:
+                with open(self.index_file, "rb") as fh:
+                    data = pickle.load(fh)  # noqa: S301 — one-time migration only
+                self.texts = data["texts"]
+                self.metadata = data["metadata"]
+                self.index = faiss.deserialize_index(data["index"])
+                logger.info(
+                    f"VectorDatabase migrated from pickle — {len(self.texts)} entries. "
+                    "Saving in new format…"
+                )
+                self.save()  # write new-format files
+                # Rename old pkl so it won't be loaded again
+                backup = self.index_file + ".bak"
+                os.rename(self.index_file, backup)
+                logger.info(f"Legacy pickle renamed to {backup}")
+                return
+            except Exception as exc:
+                logger.error(f"load (legacy pickle) failed: {exc} — starting with empty database")
+
+        logger.info("No existing vector database found — starting fresh")
 
     def clear(self) -> None:
         """Remove all entries and save the empty state."""
