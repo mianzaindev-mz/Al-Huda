@@ -1,4 +1,4 @@
-# 🕌 Al-Huda — Islamic AI Assistant
+# 🕌 Al-Huda — Islamic AI Assistan
 
 Al-Huda is an AI-powered Islamic knowledge assistant that provides accurate, verified information from the Quran and Hadith. It uses a **Retrieval-Augmented Generation (RAG)** approach — your questions are matched against 145,000+ indexed passages from authentic Islamic texts before being answered by Mistral AI.
 
